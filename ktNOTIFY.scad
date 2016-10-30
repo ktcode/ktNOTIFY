@@ -29,12 +29,12 @@ difference(){
             kaku_r( 180, y+10, 0 );
         }
         cpu_base( 3, 10, 0 );
-        lcd_base( 75, 15.5, 0 );
-        lcd_base( 135, 15.5, 0 );
+        lcd_base( 77, 15.5, 0 );
+        lcd_base( 139, 15.5, 0 );
     }
-    cpu_hole( 3, 10, cpu_height );
-    lcd_hole( 75, 15.5, lcd_height );
-    lcd_hole( 135, 15.5, lcd_height );
+    cpu_hole( 3, 10, cpu_height-hole_height );
+    lcd_hole( 77, 15.5, lcd_height-hole_height );
+    lcd_hole( 139, 15.5, lcd_height-hole_height );
 }
 
 module kaku_l( x, y, z ){
@@ -76,36 +76,40 @@ module cpu_base( x, y, z ){
 }
 module cpu_hole( x, y, z ){
     translate( [x, y, z] ){
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2,, $fn=8 );
         translate( [65, 0, 0] )
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2,, $fn=8 );
         translate( [0, 40, 0] )
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2,, $fn=8 );
         translate( [65, 40, 0] )
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2,, $fn=8 );
     }
 }
 
 module lcd_base( x, y, z ){
     translate( [x, y, z] ){
         translate( [0, 0, lcd_height/2] )
+        rotate( [0, 0, 45] )
         cube( [6, 6, lcd_height], center=true );
         translate( [52, 0, lcd_height/2] )
+        rotate( [0, 0, 45] )
         cube( [6, 6, lcd_height], center=true );
         translate( [0, 29, lcd_height/2] )
+        rotate( [0, 0, 45] )
         cube( [6, 6, lcd_height], center=true );
         translate( [52, 29, lcd_height/2] )
+        rotate( [0, 0, 45] )
         cube( [6, 6, lcd_height], center=true );
     }
 }
 module lcd_hole( x, y, z ){
     translate( [x, y, z] ){
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [52, 0, 0] )
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [0, 29, 0] )
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [52, 29, 0] )
-        cylinder( hole_height, 2, 2, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
     }
 }
