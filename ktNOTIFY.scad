@@ -28,14 +28,16 @@ difference(){
             }
             kaku_r( 180, y+10, 0 );
         }
-        cpu_base( 3, 10, 0 );
-        lcd_base( 77, 15.5, 0 );
-        lcd_base( 139, 15.5, 0 );
+        cpu_base( 5, 10, 0 );
+        lcd_base( 78, 15.5, 0 );
+        lcd_base( 138, 15.5, 0 );
     }
-    cpu_hole( 3, 10, cpu_height-hole_height );
-    lcd_hole( 77, 15.5, lcd_height-hole_height );
-    lcd_hole( 139, 15.5, lcd_height-hole_height );
+    cpu_hole( 5, 10, cpu_height-hole_height );
+    lcd_hole( 78, 15.5, lcd_height-hole_height );
+    lcd_hole( 138, 15.5, lcd_height-hole_height );
 }
+stand( 0, 0, 0 );
+stand( 180, 0, 0 );
 
 module kaku_l( x, y, z ){
     translate( [x, y, z] ){
@@ -76,13 +78,13 @@ module cpu_base( x, y, z ){
 }
 module cpu_hole( x, y, z ){
     translate( [x, y, z] ){
-        cylinder( hole_height, 1, 1.2,, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [65, 0, 0] )
-        cylinder( hole_height, 1, 1.2,, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [0, 40, 0] )
-        cylinder( hole_height, 1, 1.2,, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [65, 40, 0] )
-        cylinder( hole_height, 1, 1.2,, $fn=8 );
+        cylinder( hole_height, 1, 1.2, $fn=8 );
     }
 }
 
@@ -111,5 +113,18 @@ module lcd_hole( x, y, z ){
         cylinder( hole_height, 1, 1.2, $fn=8 );
         translate( [52, 29, 0] )
         cylinder( hole_height, 1, 1.2, $fn=8 );
+    }
+}
+
+module stand( x, y, z ){
+    translate( [x+3, y-7.75, 2.7] ){
+        rotate([ -75, 0, 0] ){
+            difference(){
+                cube( [6, 50, 10] );
+                translate( [0, -1, 8] )
+                rotate( [-15, 0, 0] )
+                cube( [6, 6, 1.5] );
+            }
+        }
     }
 }
