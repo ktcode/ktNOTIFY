@@ -5,7 +5,6 @@
 
 
 
-
 panel_thick = 5;
 cpu_height = 3.5 + panel_thick;
 lcd_height = 10 + panel_thick;
@@ -28,37 +27,61 @@ difference(){
             }
             kaku_r( 180, y+10, 0 );
         }
-        cpu_base( 5, 10, 0 );
-        lcd_base( 78, 15.5, 0 );
-        lcd_base( 138, 15.5, 0 );
+        for( x = [0:30:150] ){
+            kaku_l( x, 60, 0 );
+            kaku_r( x+15, 60, 0 );
+        }
+        kaku_l( 180, 60, 0 );
+
+        cpu_base( 5, 15, 0 );
+        lcd_base( 78, 20.5, 0 );
+        lcd_base( 138, 20.5, 0 );
     }
-    cpu_hole( 5, 10, cpu_height-hole_height );
-    lcd_hole( 78, 15.5, lcd_height-hole_height );
-    lcd_hole( 138, 15.5, lcd_height-hole_height );
+    cpu_hole( 5, 15, cpu_height-hole_height );
+    lcd_hole( 78, 20.5, lcd_height-hole_height );
+    lcd_hole( 138, 20.5, lcd_height-hole_height );
 }
 stand( 0, 0, 0 );
 stand( 180, 0, 0 );
 
+
+
 module kaku_l( x, y, z ){
     translate( [x, y, z] ){
-        linear_extrude( height = panel_thick ){
+        linear_extrude( height = panel_thick-0.5 ){
             difference(){
                 polygon(points=[ [-1,0], [10,0], [16,10], [5,10] ]);
                 polygon(points=[ [1,1], [9,1], [14,9], [6,9] ]);
-                polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
-                polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
+                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
+                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
+            }
+        } 
+        linear_extrude( height = panel_thick ){
+            difference(){
+                polygon(points=[ [-1,0], [10,0], [16,10], [5,10] ]);
+                polygon(points=[ [-1,1], [9,1], [14,10], [5,10] ]);
+                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
+                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
             }
         }
     }
 }
 module kaku_r( x, y, z ){
     translate( [x, y, z] ){
-        linear_extrude( height = panel_thick ){
+        linear_extrude( height = panel_thick-0.5 ){
             difference(){
                 polygon(points=[ [-1,10], [10,10], [16,0], [5,0] ]);
                 polygon(points=[ [1,9], [9,9], [14,1], [6,1] ]);
-                polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
-                polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
+                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
+                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
+            }
+        }
+        linear_extrude( height = panel_thick ){
+            difference(){
+                polygon(points=[ [-1,10], [10,10], [16,0], [5,0] ]);
+                polygon(points=[ [-1,9], [9,9], [14,0], [5,0] ]);
+                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
+                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
             }
         }
     }
@@ -117,11 +140,11 @@ module lcd_hole( x, y, z ){
 }
 
 module stand( x, y, z ){
-    translate( [x+3, y-7.75, 2.7] ){
+    translate( [x+3, y-11.75, 1.8] ){
         rotate([ -75, 0, 0] ){
             difference(){
-                cube( [6, 50, 10] );
-                translate( [0, -1, 8] )
+                cube( [6, 50, 15] );
+                translate( [0, -1, 12] )
                 rotate( [-15, 0, 0] )
                 cube( [6, 6, 1.5] );
             }
