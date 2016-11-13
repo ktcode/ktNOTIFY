@@ -1,153 +1,185 @@
 //
 //    ktNOTIFY
-//        Display Board
+//
 //
 
 
+panel_thick = 2.5;
+cpu_g = 3.5;
 
-panel_thick = 5;
-cpu_height = 3.5 + panel_thick;
-lcd_height = 10 + panel_thick;
-hole_height = 8;
+lcd_w = 35.04;
+lcd_h = 28.03;
+lcd_slope = 0.79;
+lcd_gap = 3.3;
 
 
 
 difference(){
-    union(){
-        for( y = [0:20:40] ){
-            for( x = [0:30:150] ){
-                kaku_l( x, y, 0 );
-                kaku_r( x+15, y, 0 );
-            }
-            kaku_l( 180, y, 0 );
-            
-            for( x = [0:30:150] ){
-                kaku_r( x, y+10, 0 );
-                kaku_l( x+15, y+10, 0 );
-            }
-            kaku_r( 180, y+10, 0 );
-        }
-        for( x = [0:30:150] ){
-            kaku_l( x, 60, 0 );
-            kaku_r( x+15, 60, 0 );
-        }
-        kaku_l( 180, 60, 0 );
-
-        cpu_base( 5, 15, 0 );
-        lcd_base( 78, 20.5, 0 );
-        lcd_base( 138, 20.5, 0 );
-    }
-    cpu_hole( 5, 15, cpu_height-hole_height );
-    lcd_hole( 78, 20.5, lcd_height-hole_height );
-    lcd_hole( 138, 20.5, lcd_height-hole_height );
+    cube( [70, 43, panel_thick] );
+    lcd_window( 70/2 - lcd_w/2, 43/2 - lcd_h/2 );
+    lcd_slope( 70/2 - lcd_w/2, 43/2 - lcd_h/2 );
 }
-stand( 0, 0, 0 );
-stand( 180, 0, 0 );
+difference(){
+    lcd_base( 70/2 - lcd_w/2, 43/2 - lcd_h/2, panel_thick );
+    lcd_hole( 70/2 - lcd_w/2, 43/2 - lcd_h/2, panel_thick );
+}
 
+difference(){
+    translate( [0, 0, panel_thick] ){
+        union(){
+            cube( [2.5, 21, 12.5] );
+            cube( [70, 2.5, 12.5] );
+            translate( [70-2.5, 24.5-2.5, 0] )
+            cube( [2.5, 18.5, 12.5] );
+            translate( [0, 43-2.5, 0] )
+            cube( [70, 2.5, 12.5] );
+        }
+    }
+    translate( [0, 11.5, 7] )
+    rotate( [0, 45, 90] )
+    cube( [6, 10, 6], center=true ); 
+    
+    screw_hole( 70-1.6, 37, 11.5, -90 );
+    screw_hole( 0, 6, 11.5, 90 );
+}
 
-
-module kaku_l( x, y, z ){
-    translate( [x, y, z] ){
-        linear_extrude( height = panel_thick-0.5 ){
+translate( [-15, 0, 0] ){
+    difference(){
+        union(){
             difference(){
-                polygon(points=[ [-1,0], [10,0], [16,10], [5,10] ]);
-                polygon(points=[ [1,1], [9,1], [14,9], [6,9] ]);
-                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
-                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
-            }
-        } 
-        linear_extrude( height = panel_thick ){
-            difference(){
-                polygon(points=[ [-1,0], [10,0], [16,10], [5,10] ]);
-                polygon(points=[ [-1,1], [9,1], [14,10], [5,10] ]);
-                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
-                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
+                union(){
+                    difference(){
+                        linear_extrude( height=panel_thick+12.5 )
+                        polygon( points=[ [0,43],[15,43],[15,18.5],[0,24.5] ]);
+                        translate( [0, 0, panel_thick] )
+                        linear_extrude( height=panel_thick+12.5 )
+                        polygon( points=[ [0+2.5,43-2.5],[15,43-2.5],
+                            [15,18.5+2.5],[0+2.5,24.5+1.7] ]);
+                    }
+                    translate( [6, 21.5, 7.5] )
+                    cube( [6, 6, 10], center=true );
+                    translate( [12, 19, 7.5] )
+                    cube( [6, 6, 10], center=true );
+                }
+                
+                translate( [6, 43, 6] )
+                rotate( [0, 45, 0] )
+                cube( [4.2, 10, 4.2], center=true );
+                translate( [12, 43, 9] )
+                rotate( [0, 45, 0] )
+                cube( [4.2, 10, 4.2], center=true );                
+                
+                translate( [6, 21.5+6, 7.5] )
+                cube( [6, 6, 10], center=true );
+                translate( [6, 21.5, 6] )
+                rotate( [-90, 0, 0] )
+                cylinder( 7, 1.5, 1.8, $fn=8, center=true );
+
+                translate( [12, 19+6, 7.5] )
+                cube( [6, 6, 10], center=true );
+                translate( [12, 19, 9] )
+                rotate( [-90, 0, 0] )
+                cylinder( 7, 1.5, 1.8, $fn=8, center=true );
             }
         }
+        linear_extrude( height=panel_thick+12.5 )
+        polygon( points=[ [0,0],[15,0],[15,18.5],[0,24.5] ]);
+
+        screw_hole( 0, 37, 11.5, 90 );
     }
 }
-module kaku_r( x, y, z ){
-    translate( [x, y, z] ){
-        linear_extrude( height = panel_thick-0.5 ){
+translate( [70, 0, 0] ){
+    difference(){
+        union(){
             difference(){
-                polygon(points=[ [-1,10], [10,10], [16,0], [5,0] ]);
-                polygon(points=[ [1,9], [9,9], [14,1], [6,1] ]);
-                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
-                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
+                union(){
+                    difference(){
+                        linear_extrude( height=panel_thick+12.5 )
+                        polygon( points=[ [0,0],[15,0],[15,18.5],[0,24.5] ]);
+                        translate( [0, 0, panel_thick] )
+                        linear_extrude( height=panel_thick+12.5 )
+                        polygon( points=[ [0,0+2.5],[15-2.5,0+2.5],
+                            [15-2.5,18.5-1.7],[0,24.5-2.5] ]);
+                    }
+                    translate( [6, 21.5, 7.5] )
+                    cube( [6, 6, 10], center=true );
+                    translate( [12, 19, 7.5] )
+                    cube( [6, 6, 10], center=true );
+                }
+                translate( [6, 21.5, 6] )
+                rotate( [-90, 0, 0] )
+                cylinder( 7, 1.5, 1.8, $fn=8, center=true );
+                translate( [12, 19, 9] )
+                rotate( [-90, 0, 0] )
+                cylinder( 7, 1.5, 1.8, $fn=8, center=true );
             }
         }
-        linear_extrude( height = panel_thick ){
-            difference(){
-                polygon(points=[ [-1,10], [10,10], [16,0], [5,0] ]);
-                polygon(points=[ [-1,9], [9,9], [14,0], [5,0] ]);
-                //polygon(points=[ [-1,0], [0,0], [0,10], [-1,10] ]);
-                //polygon(points=[ [15,0], [16,0], [16,10], [15,10] ]);
-            }
+        linear_extrude( height=panel_thick+12.5 )
+        polygon( points=[ [0,43],[15,43],[15,18.5],[0,24.5] ]);
+
+        translate( [15, 11.5, 7] )
+        rotate( [0, 45, 90] )
+        cube( [6, 10, 6], center=true ); 
+
+        screw_hole( 15-1.6, 6, 11.5, -90 );
+    }       
+}
+
+
+
+
+
+
+
+
+
+
+module screw_hole( x, y, z, a ){
+    translate( [x+1.6/2, y, z] ){
+        rotate( [90, 0, a] ){
+            cylinder( 2, 3, 3, $fn=12, center=true );
+            translate( [0, 0, 1.6/2+6/2] )
+            cylinder( 6, 1.8, 1.8, $fn=4, center=true );
+            translate( [0, 3-3/2, 0] )
+            cube( [ 6, 5, 2], center=true );
         }
     }
 }
 
-module cpu_base( x, y, z ){
-    translate( [x, y, z] ){
-        translate( [0, 0, cpu_height/2] )
-        cube( [6, 6, cpu_height], center=true );
-        translate( [65, 0, cpu_height/2] )
-        cube( [6, 6, cpu_height], center=true );
-        translate( [0, 40, cpu_height/2] )
-        cube( [6, 6, cpu_height], center=true );
-        translate( [65, 40, cpu_height/2] )
-        cube( [6, 6, cpu_height], center=true );
+
+module lcd_window( x, y, z ){
+    translate( [x, y, z] )
+    cube( [lcd_w, lcd_h, panel_thick] );
+}
+module lcd_slope( x, y, z ){
+    translate( [x + lcd_w/2, y + lcd_h/2, z] ){
+        scale( [lcd_w*lcd_slope, lcd_h*lcd_slope, lcd_h*lcd_slope] )
+        rotate( [0, 0, 45] )
+        cylinder( 1, 1, 0, $fn=4 );
     }
 }
-module cpu_hole( x, y, z ){
-    translate( [x, y, z] ){
-        cylinder( hole_height, 1, 1.2, $fn=8 );
-        translate( [65, 0, 0] )
-        cylinder( hole_height, 1, 1.2, $fn=8 );
-        translate( [0, 40, 0] )
-        cylinder( hole_height, 1, 1.2, $fn=8 );
-        translate( [65, 40, 0] )
-        cylinder( hole_height, 1, 1.2, $fn=8 );
-    }
-}
+
 
 module lcd_base( x, y, z ){
-    translate( [x, y, z] ){
-        translate( [0, 0, lcd_height/2] )
-        rotate( [0, 0, 45] )
-        cube( [6, 6, lcd_height], center=true );
-        translate( [52, 0, lcd_height/2] )
-        rotate( [0, 0, 45] )
-        cube( [6, 6, lcd_height], center=true );
-        translate( [0, 29, lcd_height/2] )
-        rotate( [0, 0, 45] )
-        cube( [6, 6, lcd_height], center=true );
-        translate( [52, 29, lcd_height/2] )
-        rotate( [0, 0, 45] )
-        cube( [6, 6, lcd_height], center=true );
+    translate( [x-6, y-0.5, z] ){
+        translate( [0, 0, lcd_gap/2] )
+        cylinder( lcd_gap, 3, 3, center=true, $fn=10 );
+        translate( [52, 0, lcd_gap/2] )
+        cylinder( lcd_gap, 3, 3, center=true, $fn=10 );
+        translate( [0, 29, lcd_gap/2] )
+        cylinder( lcd_gap, 3, 3, center=true, $fn=10 );
+        translate( [52, 29, lcd_gap/2] )
+        cylinder( lcd_gap, 3, 3, center=true, $fn=10 );
     }
 }
 module lcd_hole( x, y, z ){
-    translate( [x, y, z] ){
-        cylinder( hole_height, 1, 1.2, $fn=8 );
+    translate( [x-6, y-0.5, z-1.2] ){
+        cylinder( 6-1.5, 1.5, 1.8, $fn=8 );
         translate( [52, 0, 0] )
-        cylinder( hole_height, 1, 1.2, $fn=8 );
+        cylinder( 6-1.5, 1.5, 1.8, $fn=8 );
         translate( [0, 29, 0] )
-        cylinder( hole_height, 1, 1.2, $fn=8 );
+        cylinder( 6-1.5, 1.5, 1.8, $fn=8 );
         translate( [52, 29, 0] )
-        cylinder( hole_height, 1, 1.2, $fn=8 );
-    }
-}
-
-module stand( x, y, z ){
-    translate( [x+3, y-11.75, 1.8] ){
-        rotate([ -75, 0, 0] ){
-            difference(){
-                cube( [6, 50, 15] );
-                translate( [0, -1, 12] )
-                rotate( [-15, 0, 0] )
-                cube( [6, 6, 1.5] );
-            }
-        }
+        cylinder( 6-1.5, 1.5, 1.8, $fn=8 );
     }
 }
