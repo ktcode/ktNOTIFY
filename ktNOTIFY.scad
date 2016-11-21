@@ -3,7 +3,7 @@
 //
 //
 
-
+gap = 0.4;
 panel_thick = 2.5;
 cpu_g = 3.5;
 
@@ -14,11 +14,31 @@ lcd_gap = 3.3;
 
 
 
+rotate( [ 0, 0, 0] )
+cover( -15, 45, 0 );
+
 difference(){
-    cube( [70, 43, panel_thick] );
+    union(){
+        cube( [70, 43, panel_thick] );
+        
+        translate( [3, 25, panel_thick+10/2] )
+        cylinder( 10, 3, 3, $fn=10, center=true );
+        translate( [70, 17, panel_thick+10/2] )
+        cylinder( 10, 3, 3, $fn=12, center=true );
+        translate( [3, 36, panel_thick+10/2] )
+        cylinder( 10, 3, 3, $fn=10, center=true );
+        translate( [70, 6, panel_thick+10/2] )
+        cylinder( 10, 3, 3, $fn=12, center=true );
+    }
     lcd_window( 70/2 - lcd_w/2, 43/2 - lcd_h/2 );
     lcd_slope( 70/2 - lcd_w/2, 43/2 - lcd_h/2 );
+    
+    translate( [3, 25, 5.5] )
+    cylinder( 7, 1.5, 1.8, $fn=8 );
+    translate( [70, 17, 5.5] )
+    cylinder( 7, 1.5, 1.8, $fn=8 );
 }
+
 difference(){
     lcd_base( 70/2 - lcd_w/2, 43/2 - lcd_h/2, panel_thick );
     lcd_hole( 70/2 - lcd_w/2, 43/2 - lcd_h/2, panel_thick );
@@ -38,9 +58,9 @@ difference(){
     translate( [0, 11.5, 7] )
     rotate( [0, 45, 90] )
     cube( [6, 10, 6], center=true ); 
-    
-    screw_hole( 70-1.6, 37, 11.5, -90 );
-    screw_hole( 0, 6, 11.5, 90 );
+    translate( [70, 33, 7] )
+    rotate( [0, 45, 90] )
+    cube( [6, 10, 6], center=true ); 
 }
 
 translate( [-15, 0, 0] ){
@@ -85,7 +105,9 @@ translate( [-15, 0, 0] ){
         linear_extrude( height=panel_thick+12.5 )
         polygon( points=[ [0,0],[15,0],[15,18.5],[0,24.5] ]);
 
-        screw_hole( 0, 37, 11.5, 90 );
+        translate( [0, 33, 7] )
+        rotate( [0, 45, 90] )
+        cube( [6, 10, 6], center=true );
     }
 }
 translate( [70, 0, 0] ){
@@ -119,9 +141,7 @@ translate( [70, 0, 0] ){
 
         translate( [15, 11.5, 7] )
         rotate( [0, 45, 90] )
-        cube( [6, 10, 6], center=true ); 
-
-        screw_hole( 15-1.6, 6, 11.5, -90 );
+        cube( [6, 10, 6], center=true );
     }       
 }
 
@@ -129,20 +149,28 @@ translate( [70, 0, 0] ){
 
 
 
-
-
-
-
-
-module screw_hole( x, y, z, a ){
-    translate( [x+1.6/2, y, z] ){
-        rotate( [90, 0, a] ){
-            cylinder( 2, 3, 3, $fn=12, center=true );
-            translate( [0, 0, 1.6/2+6/2] )
-            cylinder( 6, 1.8, 1.8, $fn=4, center=true );
-            translate( [0, 3-3/2, 0] )
-            cube( [ 6, 5, 2], center=true );
+module cover( x, y, z, a ){
+    translate( [x, y, z] ){
+        difference(){
+            linear_extrude( height=panel_thick )
+            polygon( points=[ [0+2.5+gap,43-2.5-gap],[0+2.5+gap,24.5+1.7+gap],[15+gap,18.5+2.5+gap],
+                [15+2.5+gap,18.5+2.5+gap],[15+2.5+gap,0+2.5+gap],[15+70+15-2.5-gap,0+2.5+gap],
+                [15+70+15-2.5-gap,18.5-1.7-gap],[15+70+0-gap,24.5-2.5-gap],
+                [15+70+0-2.5-gap,24.5-2.5-gap],[15+70+0-2.5-gap,43-2.5-gap]]);
+            
+            screw_hole( 18, 25, -1.5 );
+            screw_hole( 85, 17, -1.5 );
         }
+    }
+}
+
+
+
+module screw_hole( x, y, z ){
+    translate( [x+1.6/2, y, panel_thick-2/2] ){
+        cylinder( 2, 3, 3, $fn=12, center=true );
+        translate( [0, 0, 1.6/2-6/2] )
+        cylinder( 6, 1.8, 1.8, $fn=12, center=true );
     }
 }
 
